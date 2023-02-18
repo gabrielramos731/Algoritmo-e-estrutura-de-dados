@@ -64,35 +64,28 @@ int remove_inicio(Lista *ap_lista){
   return x;  
 }
 
-// Não ta funcionando
 int remove_ocorrencias(Lista *ap_lista, int valor){
   
   int cont = 0;
-  No *atual = *ap_lista;
-  No *no_anterior = NULL;
+  if(!ap_lista) return cont;
 
-  while(atual != NULL){
-    if(atual->valor == valor && *ap_lista == atual){  //caso seja o primeiro
-      if(atual->proximo == NULL){  //primeiro e único
-        *ap_lista = NULL;
-        free(atual);
-        return cont + 1;
-      }
-      atual = atual->proximo;
-      free(*ap_lista);
-      *ap_lista = atual;
+  Lista *ap_atual = ap_lista;
+  Lista ap_remove;
+
+  while((*ap_atual)->proximo){
+    if((*ap_atual)->valor == valor){
       cont++;
+      ap_remove = *ap_atual;
+      *ap_atual = (*ap_atual)->proximo;
+      free(ap_remove);
     }
     else{
-      no_anterior = atual;
-      atual = atual->proximo;
-      if(atual->valor == valor){
-        if(atual->proximo == NULL)
-          
-        free(no_anterior->proximo);
-        cont++;
-      }
+      ap_atual = &((*ap_atual)->proximo);
     }
+  }
+  if((*ap_atual)->valor == valor){
+    remove_fim(ap_lista);
+    cont++;
   }
   return cont;
 }
