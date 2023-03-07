@@ -61,20 +61,38 @@ void soma(Polinomio res, Polinomio a, Polinomio b){
 
   int soma_coef;
   // a esta em b ou a não esta em b
-  while(no_aux_b != b && no_aux_a != a){
+  while(no_aux_a != a){
     if(no_aux_a->valor.grau == no_aux_b->valor.grau){  // valor encontrado
       soma_coef = no_aux_a->valor.coef + no_aux_b->valor.coef;
       if(soma_coef != 0)
         define_coeficiente(res, no_aux_a->valor.grau, soma_coef);
       no_aux_a = no_aux_a->prox;
     }
-    else if(no_aux_a->valor.grau <= no_aux_b->valor.grau)
-      define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef + no_aux_b->valor.coef);
-    no_aux_b = no_aux_b->prox;
-  } if(no_aux_a != a){
-      define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);  // grau de a não está em b
+    else if(no_aux_a->valor.grau <= no_aux_b->valor.grau){  // grau novo maior que todos
+      define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);
       no_aux_a = no_aux_a->prox;
+      continue;
+    }
+    else if(no_aux_b == b){  // acabaram os graus de b
+      define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);
+      no_aux_a = no_aux_a->prox;
+      continue;
+    }
+    no_aux_b = no_aux_b->prox;
+  }
+
   // b não esta em a
+  no_aux_a = a->prox;
+  no_aux_b = b->prox;
+  while(no_aux_b != b){
+    if(no_aux_b->valor.grau == no_aux_a->valor.grau){
+      no_aux_b = no_aux_b->prox;
+    }
+    else if(no_aux_a == a){
+      define_coeficiente(res, no_aux_b->valor.grau, no_aux_b->valor.coef);
+      no_aux_b = no_aux_b->prox;
+    }
+    no_aux_a = no_aux_a->prox;
   }
 }
 
@@ -82,6 +100,44 @@ void soma(Polinomio res, Polinomio a, Polinomio b){
  * Libera a memória anteriormente utilizada pelos nos descartados de res, e sobreescreve res. */
 void subtrai(Polinomio res, Polinomio a, Polinomio b){
 
+  No *no_aux_a = a->prox;
+  No *no_aux_b = b->prox;
+
+  int soma_coef;
+  // a esta em b ou a não esta em b
+  while(no_aux_a != a){
+    if(no_aux_a->valor.grau == no_aux_b->valor.grau){  // valor encontrado
+      soma_coef = no_aux_a->valor.coef - no_aux_b->valor.coef;
+      if(soma_coef != 0)
+        define_coeficiente(res, no_aux_a->valor.grau, soma_coef);
+      no_aux_a = no_aux_a->prox;
+    }
+    else if(no_aux_a->valor.grau <= no_aux_b->valor.grau){  // grau novo maior que todos
+      define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);
+      no_aux_a = no_aux_a->prox;
+      continue;
+    }
+    else if(no_aux_b == b){  // acabaram os graus de b
+      define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);
+      no_aux_a = no_aux_a->prox;
+      continue;
+    }
+    no_aux_b = no_aux_b->prox;
+  }
+
+  // b não esta em a
+  no_aux_a = a->prox;
+  no_aux_b = b->prox;
+  while(no_aux_b != b){
+    if(no_aux_b->valor.grau == no_aux_a->valor.grau){
+      no_aux_b = no_aux_b->prox;
+    }
+    else if(no_aux_a == a){
+      define_coeficiente(res, no_aux_b->valor.grau, no_aux_b->valor.coef);
+      no_aux_b = no_aux_b->prox;
+    }
+    no_aux_a = no_aux_a->prox;
+  }
 }
 
 /* /\* Computa a multiplicacao dos polinomios a e b colocando o resultado em res.  */
@@ -103,11 +159,19 @@ void imprime(Polinomio pol){
     if(no_aux != pol)
       printf(",");
   }
-  printf("]");
+  printf("]\n");
 }
 
 /* Desaloca toda a memória alocada da lista.
  */
 void desaloca_polinomio(Polinomio *ap_pol){
 
+  No *no_aux = (*ap_pol)->antec;
+
+  while(no_aux != (*ap_pol)){
+    (*ap_pol)->antec = (*ap_pol)->antec->antec;
+    free(no_aux);
+    no_aux = (*ap_pol)->antec;
+  }
+  free(*ap_pol);
 }
