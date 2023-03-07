@@ -22,38 +22,35 @@ void define_coeficiente(Polinomio pol, int grau, int coef){
     novo->valor.coef = coef;
     novo->valor.grau = grau;
 
-    if(no_aux == pol){  //caso a lista esteja vazia  OK
-      novo->prox = pol;
-      novo->antec = pol->antec;
-      pol->antec->prox = novo;
-      pol->antec = novo;
-    }
-    else{  // caso não esteja vazia
-      while(novo->valor.grau > no_aux->valor.grau){
+    while(novo->valor.grau > no_aux->valor.grau){
 
-        // grau novo é maior que todos da lista
-        if(no_aux->prox == pol){  // insere no fim OK
-          novo->prox = pol;
-          novo->antec = pol->antec;
-          pol->antec->prox = novo;
-          pol->antec = novo;
-          return;
-        }
-        no_aux = no_aux->prox;
-    }
-    novo->prox = no_aux;
-    novo->antec = no_aux->antec;
-    no_aux->antec->prox = novo;
-    no_aux->antec = novo;
-    }
+      if(no_aux->prox == pol){  // grau novo é maior que todos da lista
+        novo->prox = pol;
+        novo->antec = pol->antec;
+        pol->antec->prox = novo;
+        pol->antec = novo;
+        return;
+      }
+      no_aux = no_aux->prox;
   }
-  else  //condição não atendida coef ou grau
-    return;
+  novo->prox = no_aux;  //encontrou um grau maior que novo.grau
+  novo->antec = no_aux->antec;
+  no_aux->antec->prox = novo;
+  no_aux->antec = novo;
+  }
 }
 
 /* Zera o polinomio, tornando-o um polinomio inicializado, mas igual a zero. Desaloca a memória liberada. */
 void zera(Polinomio pol){
 
+  No *no_aux = pol->antec;
+
+  while(no_aux != pol){
+    pol->antec = pol->antec->antec;
+    free(no_aux);
+    no_aux = pol->antec;
+  }
+  pol->prox = pol;
 }
 
 /* Computa a soma dos polinomios a e b colocando o resultado em res. 
