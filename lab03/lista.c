@@ -23,7 +23,6 @@ void define_coeficiente(Polinomio pol, int grau, int coef){
     novo->valor.grau = grau;
 
     while(novo->valor.grau > no_aux->valor.grau){
-
       if(no_aux->prox == pol){  // grau novo é maior que todos da lista
         novo->prox = pol;
         novo->antec = pol->antec;
@@ -56,6 +55,23 @@ void zera(Polinomio pol){
 /* Computa a soma dos polinomios a e b colocando o resultado em res. 
  * Libera a memória anteriormente utilizada pelos nos descartados de res, e sobreescreve res. */
 void soma(Polinomio res, Polinomio a, Polinomio b){
+
+  No *no_aux_a = a->prox;
+  No *no_aux_b = b->prox;
+
+  int soma_coef;
+  // a esta em b ou a não esta em b
+  while(no_aux_a->valor.grau >= no_aux_b->valor.grau && no_aux_b != b && no_aux_a != a){
+    if(no_aux_a->valor.grau == no_aux_b->valor.grau){
+      soma_coef = no_aux_a->valor.coef + no_aux_b->valor.coef;
+      if(soma_coef != 0)
+        define_coeficiente(res, no_aux_a->valor.grau, soma_coef);
+      no_aux_a = no_aux_a->prox;
+    }
+    no_aux_b = no_aux_b->prox;
+  } if(no_aux_a != a)
+      define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);  // grau de a não está em b
+  // b não esta em a
 
 }
 
