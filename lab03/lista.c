@@ -61,18 +61,21 @@ void soma(Polinomio res, Polinomio a, Polinomio b){
 
   int soma_coef;
   // a esta em b ou a não esta em b
-  while(no_aux_a->valor.grau >= no_aux_b->valor.grau && no_aux_b != b && no_aux_a != a){
-    if(no_aux_a->valor.grau == no_aux_b->valor.grau){
+  while(no_aux_b != b && no_aux_a != a){
+    if(no_aux_a->valor.grau == no_aux_b->valor.grau){  // valor encontrado
       soma_coef = no_aux_a->valor.coef + no_aux_b->valor.coef;
       if(soma_coef != 0)
         define_coeficiente(res, no_aux_a->valor.grau, soma_coef);
       no_aux_a = no_aux_a->prox;
     }
+    else if(no_aux_a->valor.grau <= no_aux_b->valor.grau)
+      define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef + no_aux_b->valor.coef);
     no_aux_b = no_aux_b->prox;
-  } if(no_aux_a != a)
+  } if(no_aux_a != a){
       define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);  // grau de a não está em b
+      no_aux_a = no_aux_a->prox;
   // b não esta em a
-
+  }
 }
 
 /* Computa a subtracao dos polinomios a e b colocando o resultado em res. 
