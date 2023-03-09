@@ -55,88 +55,58 @@ void zera(Polinomio pol){
 /* Computa a soma dos polinomios a e b colocando o resultado em res. 
  * Libera a memória anteriormente utilizada pelos nos descartados de res, e sobreescreve res. */
 void soma(Polinomio res, Polinomio a, Polinomio b){
+
   zera(res);
   No *no_aux_a = a->prox;
   No *no_aux_b = b->prox;
 
   int soma_coef;
-  // a esta em b ou a não esta em b
-  while(no_aux_a != a){
-    if(no_aux_a->valor.grau == no_aux_b->valor.grau){  // valor encontrado
+  
+  while(no_aux_a != a || no_aux_b != b){
+    if(no_aux_a->valor.grau == no_aux_b->valor.grau){
       soma_coef = no_aux_a->valor.coef + no_aux_b->valor.coef;
       if(soma_coef != 0)
         define_coeficiente(res, no_aux_a->valor.grau, soma_coef);
       no_aux_a = no_aux_a->prox;
-    }
-    else if(no_aux_a->valor.grau <= no_aux_b->valor.grau){  // grau novo maior que todos
+      no_aux_b = no_aux_b->prox;    
+    }                                                                       
+    else if((no_aux_a->valor.grau < no_aux_b->valor.grau) || (no_aux_b == b && no_aux_a != a)){  // se a for no cabeça, adiciona o restante de b
       define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);
       no_aux_a = no_aux_a->prox;
-      continue;
     }
-    else if(no_aux_b == b){  // acabaram os graus de b
-      define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);
-      no_aux_a = no_aux_a->prox;
-      continue;
-    }
-    no_aux_b = no_aux_b->prox;
-  }
-
-  // b não esta em a
-  no_aux_a = a->prox;
-  no_aux_b = b->prox;
-  while(no_aux_b != b){
-    if(no_aux_b->valor.grau == no_aux_a->valor.grau){
-      no_aux_b = no_aux_b->prox;
-    }
-    else if(no_aux_a == a){
+    else if ((no_aux_b->valor.grau < no_aux_a->valor.grau) || (no_aux_a == a && no_aux_b != b)){ // se b for no cabeça, adiciona o restante de a
       define_coeficiente(res, no_aux_b->valor.grau, no_aux_b->valor.coef);
       no_aux_b = no_aux_b->prox;
     }
-    no_aux_a = no_aux_a->prox;
   }
 }
 
 /* Computa a subtracao dos polinomios a e b colocando o resultado em res. 
  * Libera a memória anteriormente utilizada pelos nos descartados de res, e sobreescreve res. */
-void subtrai(Polinomio res, Polinomio a, Polinomio b){
+void subtrai(Polinomio res, Polinomio a, Polinomio b){  // problema no caso 3
+  
   zera(res);
   No *no_aux_a = a->prox;
   No *no_aux_b = b->prox;
 
   int soma_coef;
-  // a esta em b ou a não esta em b
-  while(no_aux_a != a){
-    if(no_aux_a->valor.grau == no_aux_b->valor.grau){  // valor encontrado
+  
+  while(no_aux_a != a || no_aux_b != b){
+    if(no_aux_a->valor.grau == no_aux_b->valor.grau){
       soma_coef = no_aux_a->valor.coef - no_aux_b->valor.coef;
       if(soma_coef != 0)
         define_coeficiente(res, no_aux_a->valor.grau, soma_coef);
       no_aux_a = no_aux_a->prox;
-    }
-    else if(no_aux_a->valor.grau <= no_aux_b->valor.grau){  // grau novo maior que todos
+      no_aux_b = no_aux_b->prox;    
+    }                                                                       
+    else if((no_aux_a->valor.grau < no_aux_b->valor.grau) || (no_aux_b == b && no_aux_a != a)){  // se a for no cabeça, adiciona o restante de b
       define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);
       no_aux_a = no_aux_a->prox;
-      continue;
     }
-    else if(no_aux_b == b){  // acabaram os graus de b
-      define_coeficiente(res, no_aux_a->valor.grau, no_aux_a->valor.coef);
-      no_aux_a = no_aux_a->prox;
-      continue;
-    }
-    no_aux_b = no_aux_b->prox;
-  }
-
-  // b não esta em a
-  no_aux_a = a->prox;
-  no_aux_b = b->prox;
-  while(no_aux_b != b){
-    if(no_aux_b->valor.grau == no_aux_a->valor.grau){
+    else if ((no_aux_b->valor.grau < no_aux_a->valor.grau) || (no_aux_a == a && no_aux_b != b)){ // se b for no cabeça, adiciona o restante de a
+      define_coeficiente(res, no_aux_b->valor.grau, no_aux_b->valor.coef);
       no_aux_b = no_aux_b->prox;
     }
-    else if(no_aux_a == a){
-      define_coeficiente(res, no_aux_b->valor.grau, (-1)*no_aux_b->valor.coef);
-      no_aux_b = no_aux_b->prox;
-    }
-    no_aux_a = no_aux_a->prox;
   }
 }
 
