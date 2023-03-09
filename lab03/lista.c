@@ -55,7 +55,7 @@ void zera(Polinomio pol){
 /* Computa a soma dos polinomios a e b colocando o resultado em res. 
  * Libera a memória anteriormente utilizada pelos nos descartados de res, e sobreescreve res. */
 void soma(Polinomio res, Polinomio a, Polinomio b){
-
+  zera(res);
   No *no_aux_a = a->prox;
   No *no_aux_b = b->prox;
 
@@ -99,7 +99,7 @@ void soma(Polinomio res, Polinomio a, Polinomio b){
 /* Computa a subtracao dos polinomios a e b colocando o resultado em res. 
  * Libera a memória anteriormente utilizada pelos nos descartados de res, e sobreescreve res. */
 void subtrai(Polinomio res, Polinomio a, Polinomio b){
-
+  zera(res);
   No *no_aux_a = a->prox;
   No *no_aux_b = b->prox;
 
@@ -133,7 +133,7 @@ void subtrai(Polinomio res, Polinomio a, Polinomio b){
       no_aux_b = no_aux_b->prox;
     }
     else if(no_aux_a == a){
-      define_coeficiente(res, no_aux_b->valor.grau, no_aux_b->valor.coef);
+      define_coeficiente(res, no_aux_b->valor.grau, (-1)*no_aux_b->valor.coef);
       no_aux_b = no_aux_b->prox;
     }
     no_aux_a = no_aux_a->prox;
